@@ -3,6 +3,7 @@
 
 #include "BaseCharacter.h"
 
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -32,3 +33,31 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+
+void ABaseCharacter::CalculateHealth(float delta)
+{
+	Health += delta;
+	CalculateDead();
+	
+}
+
+
+void ABaseCharacter::CalculateDead()
+{
+	if (Health <= 0)
+		isDead = true;
+	else
+		isDead = false;
+}
+
+#if WITH_EDITOR	
+void ABaseCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	isDead = false;
+	Health = 100;
+
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	CalculateDead();
+}
+#endif
